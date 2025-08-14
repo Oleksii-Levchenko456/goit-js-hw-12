@@ -14,6 +14,7 @@ import { showLoader } from "./js/render-functions";
 import { hideLoader } from "./js/render-functions";
 import { clearGallery } from "./js/render-functions";
 import { createMoreGallery } from "./js/render-functions";
+import { smoothScroll } from "./js/render-functions";
 
 
 const form = document.querySelector('.form')
@@ -47,6 +48,8 @@ form.addEventListener('submit', (e)=>{
             iziToast.error({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
             }) 
+            hideLoadMoreButton()
+            return
         }
         createGallery(hits)
         showLoadMoreButton()
@@ -62,17 +65,8 @@ form.addEventListener('submit', (e)=>{
 })
 
 
-// buttonLoadMore.addEventListener('click', ()=>{
-//   searchTextValue = searchText.value.trim()
-//   getImagesByQuery(searchTextValue, ++page)
-//   .then(images =>{
-//     createGallery(images)
-//   })
-// })
 
 buttonLoadMore.addEventListener('click', ()=>{
-
-
 
   
   hideLoadMoreButton()
@@ -85,11 +79,14 @@ buttonLoadMore.addEventListener('click', ()=>{
     iziToast.show({
       message: 'Were sorry, but youve reached the end of search results.'
     })
+    hideLoadMoreButton()
     return
   }
     createMoreGallery(hits)
+    smoothScroll()
     hideLoader()
     showLoadMoreButton()
+    
     
   })
 })

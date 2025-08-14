@@ -2,12 +2,13 @@ import SimpleLightbox from "simplelightbox";
 
 let lightboxInstance;
 
+
 // СТВОРЕННЯ РОЗМІТКИ
 export function createGallery(images) {
   const galleryContainer = document.querySelector('.gallery');
   
   const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, downloads, comments}) => `
-    <a href="${largeImageURL}" class="gallery_item">
+    <a href="${largeImageURL}" class="gallery_item elem-js">
       <img src="${webformatURL}" alt="${tags}" loading="lazy" />
 
 <ul class="stats-container">
@@ -117,6 +118,19 @@ export function createMoreGallery(images){
     lightboxInstance.refresh();
   }}
 
-// export function checkPage (totalHits, per_page) {
-//  let totalPages = Math.ceil(totalHits / per_page)
-//   }
+
+export function smoothScroll() {
+  const elements = document.querySelectorAll('.elem-js');
+  const lastElement = elements[elements.length - 1];
+  if (!lastElement) return;
+
+  // Висота останнього елемента
+  const height = lastElement.getBoundingClientRect().height;
+
+  // Прокрутка вниз на цю висоту
+  window.scrollBy({
+    top: height,
+    behavior: 'smooth'
+  });
+}
+

@@ -4,7 +4,9 @@
   gap: 16px; /* відступи між картками */
   padding: 20px;
 }
-
+.form{
+  text-align: center;
+}
 .gallery_item {
   display: block;
   border-radius: 8px;
@@ -92,4 +94,20 @@ margin: 0 auto 0 auto;
 }
 .is-not-active{
   display: none;
+}
+.button{
+  border: none;
+  color: aliceblue;
+  background: #4e75ff;
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 86px;
+  height: 30px;
+}
+.load-more{
+  
+  width: 100px;
+  height: 40px;
+  display: block;
+  margin: 0 auto;
 }
