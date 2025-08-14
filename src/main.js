@@ -9,25 +9,30 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 import { getImagesByQuery } from "./js/pixabay-api";
-import { createGallery } from "./js/render-functions";
+import { createGallery, hideLoadMoreButton, showLoadMoreButton } from "./js/render-functions";
 import { showLoader } from "./js/render-functions";
 import { hideLoader } from "./js/render-functions";
 import { clearGallery } from "./js/render-functions";
+import { createMoreGallery } from "./js/render-functions";
+
 
 const form = document.querySelector('.form')
 const searchText = document.querySelector('[name="search-text"]')
+const buttonLoadMore = document.querySelector('.button-js')
+const per_page = 15;
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   showLoader()
-// });
-// window.addEventListener('load', () => {
-//   hideLoader()
-// });
+let totalHitsValue = ''
+let page = 1;
+let searchTextValue = '';
+
+
 
 
 
 form.addEventListener('submit', (e)=>{
     e.preventDefault();
+    searchTextValue = searchText.value.trim()
+    
     console.log(searchText.value)
  if(searchText.value.trim() === ''){
           iziToast.error({
@@ -37,15 +42,14 @@ form.addEventListener('submit', (e)=>{
         }
     clearGallery()
     showLoader()
-    getImagesByQuery(searchText.value.trim()).then(images => {
-        if (images.length === 0){
+    getImagesByQuery(searchTextValue, page).then(({hits, totalHits}) => {
+        if (hits.length === 0){
             iziToast.error({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
             }) 
-            
         }
-        
-        createGallery(images)
+        createGallery(hits)
+        showLoadMoreButton()
     })
     .catch(err =>{
       iziToast.error({
@@ -56,3 +60,37 @@ form.addEventListener('submit', (e)=>{
       hideLoader()
     })
 })
+
+
+// buttonLoadMore.addEventListener('click', ()=>{
+//   searchTextValue = searchText.value.trim()
+//   getImagesByQuery(searchTextValue, ++page)
+//   .then(images =>{
+//     createGallery(images)
+//   })
+// })
+
+buttonLoadMore.addEventListener('click', ()=>{
+
+
+
+  
+  hideLoadMoreButton()
+  showLoader()
+  searchTextValue = searchText.value.trim()
+  getImagesByQuery(searchTextValue, ++page)
+  .then(({hits, totalHits}) =>{
+    const totalPages = Math.ceil(totalHits / per_page) 
+    if (page >= totalPages){
+    iziToast.show({
+      message: 'Were sorry, but youve reached the end of search results.'
+    })
+    return
+  }
+    createMoreGallery(hits)
+    hideLoader()
+    showLoadMoreButton()
+    
+  })
+})
+

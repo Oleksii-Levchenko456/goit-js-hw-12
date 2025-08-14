@@ -2,6 +2,7 @@ import SimpleLightbox from "simplelightbox";
 
 let lightboxInstance;
 
+// СТВОРЕННЯ РОЗМІТКИ
 export function createGallery(images) {
   const galleryContainer = document.querySelector('.gallery');
   
@@ -38,11 +39,13 @@ export function createGallery(images) {
     lightboxInstance.refresh();
   }}
 
+  // ОЧИСТИТИ ГАЛЕРЕЮ
   export function clearGallery() {
   const galleryContainer = document.querySelector('.gallery');
   galleryContainer.innerHTML = '';
 }
 
+// ПОКАЗАТИ ЛОАДЕР
 export function showLoader(){
   const loader = document.querySelector('.loader');
   if (loader) {
@@ -51,7 +54,7 @@ export function showLoader(){
     console.warn('Loader element not found');
   }
 }
-
+// ЗХОВАТИ ЛОАДЕР
 export function hideLoader(){
   const loader = document.querySelector('.loader');
   if (loader) {
@@ -60,3 +63,60 @@ export function hideLoader(){
     console.warn('Loader element not found in hideLoader');
   }
 }
+
+// ПОКАЗАТИ КНОПКУ "MORE PAGE"
+export function showLoadMoreButton(){
+  const button = document.querySelector('.button-js')
+  button.classList.remove('is-not-active')
+}
+
+// СХОВАТИ КНОПКУ "MORE PAGE"
+export function hideLoadMoreButton(){
+  const button = document.querySelector('.button-js')
+  button.classList.add('is-not-active')
+}
+
+// ДОДАТИ ГАЛЕРЕЮ
+
+export function createMoreGallery(images){
+
+
+    const galleryContainer = document.querySelector('.gallery');
+  
+  const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, downloads, comments}) => `
+    <a href="${largeImageURL}" class="gallery_item">
+      <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+
+<ul class="stats-container">
+  <li class="stat-item">
+    <span>Likes</span>
+    <span>${likes}</span>
+  </li>
+  <li class="stat-item">
+    <span>Views</span>
+    <span>${views}</span>
+  </li>
+  <li class="stat-item">
+    <span>Comments</span>
+    <span>${comments}</span>
+  </li>
+  <li class="stat-item">
+    <span>Downloads</span>
+    <span>${downloads}</span>
+  </li>
+</ul>
+    </a>
+  `).join('');
+
+  galleryContainer.insertAdjacentHTML('beforeend', markup)
+  
+
+  if (!lightboxInstance) {
+    lightboxInstance = new SimpleLightbox('.gallery a');
+  } else {
+    lightboxInstance.refresh();
+  }}
+
+// export function checkPage (totalHits, per_page) {
+//  let totalPages = Math.ceil(totalHits / per_page)
+//   }
