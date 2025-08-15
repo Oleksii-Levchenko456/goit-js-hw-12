@@ -2,10 +2,7 @@
 import iziToast from "izitoast";
 // Додатковий імпорт стилів
 import "izitoast/dist/css/iziToast.min.css";
-// Описаний у документації
-import SimpleLightbox from "simplelightbox";
-// Додатковий імпорт стилів
-import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 
 import { getImagesByQuery } from "./js/pixabay-api";
@@ -45,14 +42,21 @@ form.addEventListener('submit', (e)=>{
     showLoader()
     page = 1
     getImagesByQuery(searchTextValue, page).then(({hits, totalHits}) => {
-      
+      const totalPages = Math.ceil(totalHits / per_page)
         if (hits.length === 0){
             iziToast.error({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
             }) 
             hideLoadMoreButton()
             return
-        }
+            // ПЕРЕВІРКА PAGE
+        } else if (page >= totalPages){
+    iziToast.show({
+      message: 'Were sorry, but youve reached the end of search results.'
+    })
+    hideLoadMoreButton()
+    return
+  }
         createGallery(hits)
         showLoadMoreButton()
     })
