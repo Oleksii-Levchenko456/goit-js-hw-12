@@ -43,7 +43,9 @@ form.addEventListener('submit', (e)=>{
         }
     clearGallery()
     showLoader()
+    page = 1
     getImagesByQuery(searchTextValue, page).then(({hits, totalHits}) => {
+      
         if (hits.length === 0){
             iziToast.error({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
@@ -84,10 +86,16 @@ buttonLoadMore.addEventListener('click', ()=>{
   }
     createMoreGallery(hits)
     smoothScroll()
-    hideLoader()
     showLoadMoreButton()
     
     
   })
+  .catch((error)=>{
+  console.error(error)
 })
+.finally(()=>{
+hideLoader()
+})
+})
+
 
