@@ -40,9 +40,11 @@ form.addEventListener('submit', (e)=>{
         }
     clearGallery()
     showLoader()
-    page = 1
-    getImagesByQuery(searchTextValue, page).then(({hits, totalHits}) => {
-      const totalPages = Math.ceil(totalHits / per_page)
+    page = 1;
+    async function getImagesFunction(searchTextValue, page) {
+      try {
+        const {hits, totalHits} = await getImagesByQuery(searchTextValue, page)
+        const totalPages = Math.ceil(totalHits / per_page)
         if (hits.length === 0){
             iziToast.error({
                 message: 'Sorry, there are no images matching your search query. Please try again!',
@@ -51,24 +53,30 @@ form.addEventListener('submit', (e)=>{
             return
             // ПЕРЕВІРКА PAGE
         } else if (page >= totalPages){
-    iziToast.show({
-      message: 'Were sorry, but youve reached the end of search results.'
-    })
-    hideLoadMoreButton()
-    return
-  }
+          iziToast.show({
+          message: 'Were sorry, but youve reached the end of search results.'
+          })
+          hideLoadMoreButton()
+          return
+          }
         createGallery(hits)
         showLoadMoreButton()
-    })
-    .catch(err =>{
+        }
+      catch(err){
       iziToast.error({
         message: 'Please try again later'
       })
-    })
-    .finally(()=>{
+      console.error(err)
+    }
+      finally{
       hideLoader()
-    })
-})
+    }
+}
+getImagesFunction(searchTextValue, page);
+
+});
+
+  
 
 
 
