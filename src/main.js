@@ -80,34 +80,34 @@ getImagesFunction(searchTextValue, page);
 
 
 
-buttonLoadMore.addEventListener('click', ()=>{
+buttonLoadMore.addEventListener('click', async ()=>{
 
   
   hideLoadMoreButton()
   showLoader()
-  searchTextValue = searchText.value.trim()
-  getImagesByQuery(searchTextValue, ++page)
-  .then(({hits, totalHits}) =>{
+  try{
+    const {hits, totalHits} = await getImagesByQuery(searchTextValue, ++page)
     const totalPages = Math.ceil(totalHits / per_page) 
     if (page >= totalPages){
     iziToast.show({
       message: 'Were sorry, but youve reached the end of search results.'
     })
     hideLoadMoreButton()
-    return
-  }
     createMoreGallery(hits)
     smoothScroll()
+    return
+  }
+  createMoreGallery(hits)
+    smoothScroll()
     showLoadMoreButton()
-    
-    
-  })
-  .catch((error)=>{
+  }
+  
+  catch (error){
   console.error(error)
-})
-.finally(()=>{
+}
+finally{
 hideLoader()
-})
-})
 
+}
+})
 
