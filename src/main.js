@@ -11,7 +11,7 @@ import { showLoader } from "./js/render-functions";
 import { hideLoader } from "./js/render-functions";
 import { clearGallery } from "./js/render-functions";
 import { createMoreGallery } from "./js/render-functions";
-import { smoothScroll } from "./js/render-functions";
+
 
 
 const form = document.querySelector('.form')
@@ -22,6 +22,20 @@ const per_page = 15;
 let totalHitsValue = ''
 let page = 1;
 let searchTextValue = '';
+function smoothScroll() {
+  const elements = document.querySelectorAll('.elem-js');
+  const lastElement = elements[elements.length - 1];
+  if (!lastElement) return;
+
+  // Висота останнього елемента
+  const height = lastElement.getBoundingClientRect().height;
+
+  // Прокрутка вниз на цю висоту
+  window.scrollBy({
+    top: height,
+    behavior: 'smooth'
+  });
+}
 
 
 
@@ -57,6 +71,7 @@ form.addEventListener('submit', (e)=>{
           message: 'Were sorry, but youve reached the end of search results.'
           })
           hideLoadMoreButton()
+          createGallery(hits)
           return
           }
         createGallery(hits)

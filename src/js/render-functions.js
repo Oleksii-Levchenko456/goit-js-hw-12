@@ -121,18 +121,5 @@ export function createMoreGallery(images){
   }}
 
 
-export function smoothScroll() {
-  const elements = document.querySelectorAll('.elem-js');
-  const lastElement = elements[elements.length - 1];
-  if (!lastElement) return;
 
-  // Висота останнього елемента
-  const height = lastElement.getBoundingClientRect().height;
-
-  // Прокрутка вниз на цю висоту
-  window.scrollBy({
-    top: height,
-    behavior: 'smooth'
-  });
-}
 
